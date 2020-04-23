@@ -34,3 +34,9 @@
 build
 cmake-build-debug
 .idea
+config.json
+
+# SQLITE3
+*.db
+*.db-shm
+*.db-wal

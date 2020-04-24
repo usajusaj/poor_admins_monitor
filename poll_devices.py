@@ -66,7 +66,6 @@ def main():
                 log.info("Read temperature %.3fC from device %s", temperature / 1000., device.name)
                 conn.execute("UPDATE device SET last_ts=CURRENT_TIMESTAMP, last_reading=? WHERE id=?;",
                              (temperature, device_id))
-                conn.execute("INSERT INTO reading(device, value) VALUES (?, ?);", (device_id, temperature))
             else:
                 log.warning("Device %s failed CRC", device.name)
 

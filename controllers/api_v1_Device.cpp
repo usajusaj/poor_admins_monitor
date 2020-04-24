@@ -57,3 +57,30 @@ void Device::getDevice(const HttpRequestPtr &req, function<void(const HttpRespon
                 callback(HttpResponse::newHttpJsonResponse(ret));
             }, p1);
 }
+
+void Device::history(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1) {
+    auto clientPtr = drogon::app().getDbClient();
+    clientPtr->execSqlAsync(
+            "SELECT * FROM reading WHERE device=? ORDER BY ts DESC LIMIT 100;",
+            [callback](const orm::Result &r) {
+                Json::Value ret;
+
+                if (r.empty()) {
+                    ret["error"] = "Device not found";
+                } else {
+                    int i = 0;
+                    for (const auto &row : r) {
+                        ret["device"]["id"] = row["device"].as<int>();
+                        ret["device"]["history"][i]["ts"] = row["ts"].as<string>();
+                        ret["device"]["history"][i]["t"] = row["value"].as<int>() / 1000.;
+                        i++;
+                    }
+                }
+                callback(HttpResponse::newHttpJsonResponse(ret));
+            },
+            [callback](const orm::DrogonDbException &e) {
+                Json::Value ret;
+                ret["error"] = "Database error";
+                callback(HttpResponse::newHttpJsonResponse(ret));
+            }, p1);
+}

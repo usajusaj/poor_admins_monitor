@@ -20,10 +20,18 @@ namespace api::v1 {
                            {Get},
                            true,
                            "Device::getDevice");
+
+            registerMethod(&Device::history,
+                           "/get/{}/history",
+                           {Get},
+                           true,
+                           "Device::history");
         }
 
         static void list(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback);
 
         static void getDevice(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1);
+
+        static void history(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1);
     };
 }

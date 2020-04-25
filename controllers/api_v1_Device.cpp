@@ -9,7 +9,7 @@ using namespace std;
 void Device::list(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback) {
     auto clientPtr = drogon::app().getDbClient();
     clientPtr->execSqlAsync(
-            "SELECT id, name, last_ts, last_reading FROM device",
+            "SELECT id, name, datetime(last_ts,'localtime'), last_reading FROM device",
             [callback](const orm::Result &r) {
                 Json::Value ret;
 
@@ -35,7 +35,7 @@ void Device::list(const HttpRequestPtr &req, function<void(const HttpResponsePtr
 void Device::getDevice(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1) {
     auto clientPtr = drogon::app().getDbClient();
     clientPtr->execSqlAsync(
-            "SELECT * FROM device WHERE id=?;",
+            "SELECT id, name, datetime(last_ts, 'localtime'), last_reading FROM device WHERE id=?;",
             [callback](const orm::Result &r) {
                 Json::Value ret;
 
@@ -58,10 +58,18 @@ void Device::getDevice(const HttpRequestPtr &req, function<void(const HttpRespon
             }, p1);
 }
 
-void Device::history(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1) {
+void
+Device::historyRange(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1, int p2) {
     auto clientPtr = drogon::app().getDbClient();
+
+    int limit = 100;
+    if (p2 > 0) {
+        limit = p2;
+    }
+
     clientPtr->execSqlAsync(
-            "SELECT * FROM reading WHERE device=? ORDER BY ts DESC LIMIT 100;",
+            "SELECT device, datetime(ts, 'localtime') as ts, value FROM reading WHERE device=? ORDER BY ts DESC LIMIT " +
+            to_string(limit),
             [callback](const orm::Result &r) {
                 Json::Value ret;
 
@@ -83,4 +91,8 @@ void Device::history(const HttpRequestPtr &req, function<void(const HttpResponse
                 ret["error"] = "Database error";
                 callback(HttpResponse::newHttpJsonResponse(ret));
             }, p1);
+}
+
+void Device::history(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1) {
+    Device::historyRange(req, move(callback), p1, 100);
 }

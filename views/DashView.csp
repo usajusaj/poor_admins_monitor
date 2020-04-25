@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<%c++
+auto dvs=@@.get<std::unordered_map<int,std::string>>("devices");
+%>
+<head>
+    <%view head %>
+</head>
+<body>
+<div class="grid-container">
+    <h1>[[ title ]]</h1>
+
+    <div class="grid-x grid-margin-x">
+        <div class="cell shrink">
+            <ul class="vertical menu">
+                <li class="menu-text">
+                    <span class="menu-text">Devices</span>
+
+                    <ul class="nested vertical menu">
+                        <%c++ for(auto iter:dvs){%>
+                        <li><a href="#" data-device-id="{%iter.first%}">{%iter.second%}</a></li>
+                        <%c++}%>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="cell auto">
+            <canvas id="chart" class="hide"></canvas>
+        </div>
+    </div>
+</div>
+<script src="/static/js/Chart.bundle.min.js"></script>
+<script defer src="/static/js/app.js" ></script>
+</body>
+</html>

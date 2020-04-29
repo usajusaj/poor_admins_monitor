@@ -49,4 +49,6 @@ sqlite3 database.db
   - `http://host:port/api/v1/device/get/1/history`
   
 ## Future features
-too many to list, but mainly a nice html UI
+- Advertise service over avahi
+- Email alerts in polling script
+- Configuration script to assign each device a verbose name and location

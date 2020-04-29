@@ -1,0 +1,9 @@
+[Unit]
+Description=Run poor admin's monitor
+
+[Service]
+Type=simple
+ExecStart=/home/pi/poor_admins_monitor/build/poor_admins_monitor /home/pi/poor_admins_monitor/config.json
+
+[Install]
+WantedBy=multi-user.target

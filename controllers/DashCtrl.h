@@ -1,16 +1,27 @@
 #pragma once
 
-#include <drogon/HttpSimpleController.h>
+#include <drogon/HttpController.h>
 
 using namespace drogon;
+using namespace std;
 
-class DashCtrl : public drogon::HttpSimpleController<DashCtrl> {
+class DashCtrl : public drogon::HttpController<DashCtrl> {
 public:
-    void asyncHandleHttpRequest(
-            const HttpRequestPtr &req,
-            std::function<void(const HttpResponsePtr &)> &&callback) override;
-
     [[maybe_unused]] static void initPathRouting() {
-        registerSelf__("/", {Get});
+        registerMethod(&DashCtrl::dash,
+                       "/",
+                       {Get},
+                       false,
+                       "DeviceCtrl::dash");
+
+        registerMethod(&DashCtrl::realtime,
+                       "/rt",
+                       {Get},
+                       false,
+                       "DeviceCtrl::realtime");
     }
+
+    static void dash(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback);
+
+    static void realtime(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback);
 };

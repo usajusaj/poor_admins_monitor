@@ -21,6 +21,12 @@ namespace api::v1 {
                            true,
                            "Device::getDevice");
 
+            registerMethod(&Device::current,
+                           "/get/{device_id}/current",
+                           {Get},
+                           true,
+                           "Device::current");
+
             registerMethod(&Device::history,
                            "/get/{device_id}/history",
                            {Get},
@@ -37,6 +43,8 @@ namespace api::v1 {
         static void list(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback);
 
         static void getDevice(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1);
+
+        static void current(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1);
 
         static void
         historyRange(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1, int p2);

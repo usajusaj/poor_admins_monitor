@@ -1,0 +1,23 @@
+<%c++ auto dvs=@@.get<std::unordered_map<int,std::string>>("device_list"); %>
+
+<%view layout_head%>
+<table class="pure-table pure-table-horizontal">
+    <thead>
+    <tr>
+        <th>Device</th>
+        <th>Temperature</th>
+        <th>Timestamp</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <%c++ for(auto iter:dvs){%>
+    <tr data-device-id="{%iter.first%}">
+        <td>{%iter.second%}</td>
+        <td class="temperature">-</td>
+        <td class="timestamp">-</td>
+    </tr>
+    <%c++ }%>
+    </tbody>
+</table>
+<%view layout_foot%>

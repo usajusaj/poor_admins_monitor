@@ -1,0 +1,43 @@
+<%c++ auto dvs=@@.get<std::unordered_map<int,std::string>>("devices"); %>
+
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>[[ title ]]</title>
+    <link rel="stylesheet" href="/static/css/pure-min.css">
+    <link rel="stylesheet" href="/static/css/side-menu.css">
+    <link rel="stylesheet" href="/static/css/app.css">
+</head>
+<body>
+<div id="layout">
+    <a href="#menu" id="menuLink" class="menu-link">
+        <span></span>
+    </a>
+
+    <div id="menu">
+        <div class="pure-menu custom-restricted-width">
+            <span class="pure-menu-heading">PAM</span>
+
+            <ul class="pure-menu-list">
+                <li class="pure-menu-item"><a href="/" class="pure-menu-link">Temperature</a></li>
+                <%c++ for(auto iter:dvs){%>
+                <li class="pure-menu-item sub-item">
+                    <a href="#" class="pure-menu-link" data-device-id="{%iter.first%}"
+                       data-device-name="{%iter.second%}">&gt;
+                        {%iter.second%}</a></li>
+                <%c++}%>
+                <li class="pure-menu-item"><a href="/rt" class="pure-menu-link">Real-time</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <div id="main">
+        <div class="header">
+            <div class="pure-menu pure-menu-horizontal">
+                <a href="/" class="pure-menu-heading pure-menu-link">[[ title ]]</a>
+            </div>
+        </div>
+        <div class="content">

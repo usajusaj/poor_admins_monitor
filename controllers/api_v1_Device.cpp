@@ -1,4 +1,5 @@
-﻿#include "api_v1_Device.h"
+﻿#include <fstream>
+#include "api_v1_Device.h"
 
 using namespace api::v1;
 using namespace std;
@@ -9,7 +10,7 @@ using namespace std;
 void Device::list(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback) {
     auto clientPtr = drogon::app().getDbClient();
     clientPtr->execSqlAsync(
-            "SELECT id, name, datetime(last_ts,'localtime'), last_reading FROM device",
+            "SELECT id, name, verbose_name, datetime(last_ts,'localtime'), last_reading FROM device",
             [callback](const orm::Result &r) {
                 Json::Value ret;
 
@@ -17,6 +18,7 @@ void Device::list(const HttpRequestPtr &req, function<void(const HttpResponsePtr
                 for (const auto &row : r) {
                     ret["devices"][i]["id"] = row["id"].as<int>();
                     ret["devices"][i]["name"] = row["name"].as<string>();
+                    ret["devices"][i]["verbose_name"] = row["verbose_name"].as<string>();
                     i++;
                 }
 
@@ -48,6 +50,50 @@ void Device::getDevice(const HttpRequestPtr &req, function<void(const HttpRespon
                     ret["device"]["name"] = row["name"].as<string>();
                     ret["device"]["time"] = row["last_ts"].as<string>();
                     ret["device"]["temperature"] = row["last_reading"].as<int>() / 1000.;
+                }
+                callback(HttpResponse::newHttpJsonResponse(ret));
+            },
+            [callback](const orm::DrogonDbException &e) {
+                Json::Value ret;
+                ret["error"] = "Database error";
+                callback(HttpResponse::newHttpJsonResponse(ret));
+            }, p1);
+}
+
+void Device::current(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1) {
+    auto clientPtr = drogon::app().getDbClient();
+    clientPtr->execSqlAsync(
+            "SELECT id, name, path, datetime(last_ts, 'localtime'), last_reading FROM device WHERE id=?;",
+            [callback](const orm::Result &r) {
+                Json::Value ret;
+
+                if (r.empty()) {
+                    ret["error"] = "Device not found";
+                } else {
+                    const auto &row = r.front();
+
+                    string path = row["path"].as<string>();
+                    string line;
+
+                    ifstream deviceFp(path + "/w1_slave");
+                    if (deviceFp.is_open()) {
+                        if (getline(deviceFp, line) && line.compare(line.size() - 3, 3, "YES") == 0) {
+                            if (getline(deviceFp, line)) {
+                                ret["temperature"] = stoi(line.substr(line.rfind('=') + 1)) / 1000.;
+                            } else {
+                                // No second line??
+                                ret["error"] = "Problem while reading device";
+                            }
+                        } else {
+                            // Either empty file or CRC error
+                            ret["error"] = "Problem while reading device";
+                        }
+
+                        deviceFp.close();
+                    } else {
+                        ret["error"] = "Unable to contact device";
+                    }
+
                 }
                 callback(HttpResponse::newHttpJsonResponse(ret));
             },

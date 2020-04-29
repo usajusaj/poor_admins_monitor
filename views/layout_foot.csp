@@ -1,0 +1,12 @@
+<%c++ auto scripts=@@.get<std::vector<std::string>>("js"); %>
+
+        </div>
+    </div>
+</div>
+
+    <%c++ for(auto iter:scripts){%>
+    <script defer src="{%iter%}"></script>
+    <%c++ }%>
+    <script defer src="/static/js/app.js"></script>
+</body>
+</html>

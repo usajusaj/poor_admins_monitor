@@ -6,6 +6,7 @@ CREATE TABLE device
 (
     id           INTEGER PRIMARY KEY,
     name         TEXT NOT NULL UNIQUE,
+    verbose_name TEXT,
     path         TEXT NOT NULL UNIQUE,
     last_ts      DATETIME,
     last_reading INTEGER

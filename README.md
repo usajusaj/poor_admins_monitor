@@ -52,3 +52,7 @@ sqlite3 database.db
 - Advertise service over avahi
 - Email alerts in polling script
 - Configuration script to assign each device a verbose name and location
+
+## Gallery
+### Main page with graphed temperatures
+![Dashboard](gallery/Graph_page.png)

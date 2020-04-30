@@ -24,7 +24,7 @@ function removeTrack(device_id) {
 
     let i = 0;
     for (let ds of chartjs.data.datasets) {
-        if (ds['label'] === aEle.text) {
+        if (ds['label'] === aEle.dataset["deviceName"]) {
             chartjs.data.datasets.splice(i, 1);
         }
         i++;
@@ -91,7 +91,6 @@ chartjs = new Chart(ctx, {
     options: {
         maintainAspectRatio: false,
         onResize: (self, size) => {
-            console.log(self, size);
             self.options.legend.display = size.width > 768;
             self.update();
         },
@@ -138,4 +137,5 @@ for (let dev of document.querySelectorAll(`[data-device-id]`)) {
         }
         evt.preventDefault();
     });
+    addTrack(dev.dataset["deviceId"], false);
 }

@@ -142,3 +142,8 @@ Device::historyRange(const HttpRequestPtr &req, function<void(const HttpResponse
 void Device::history(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1) {
     Device::historyRange(req, move(callback), p1, 100);
 }
+
+void Device::allHistory(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback) {
+    //TODO: Implement this
+}
+

@@ -33,6 +33,12 @@ namespace api::v1 {
                            true,
                            "Device::history");
 
+            registerMethod(&Device::allHistory,
+                           "/history",
+                           {Get},
+                           true,
+                           "Device::allHistory");
+
             registerMethod(&Device::historyRange,
                            "/get/{device_id}/history?minutes={minutes}",
                            {Get},
@@ -50,5 +56,7 @@ namespace api::v1 {
         historyRange(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1, int p2);
 
         static void history(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback, int p1);
+
+        static void allHistory(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback);
     };
 }

@@ -10,7 +10,7 @@ using namespace std;
 void Device::list(const HttpRequestPtr &req, function<void(const HttpResponsePtr &)> &&callback) {
     auto clientPtr = drogon::app().getDbClient();
     clientPtr->execSqlAsync(
-            "SELECT id, name, verbose_name, datetime(last_ts,'localtime'), last_reading FROM device",
+            "SELECT id, name, verbose_name, datetime(last_ts,'localtime'), last_reading FROM device ORDER BY id",
             [callback](const orm::Result &r) {
                 Json::Value ret;
 

@@ -16,7 +16,7 @@ void DashCtrl::dash(
 
     auto clientPtr = drogon::app().getDbClient();
     clientPtr->execSqlAsync(
-            "SELECT id, name FROM device",
+            "SELECT id, name FROM device ORDER BY id",
             [callback, ctrlData](const orm::Result &r) mutable {
                 unordered_map<int, string> devices;
 
@@ -45,7 +45,7 @@ void DashCtrl::realtime(
 
     auto clientPtr = drogon::app().getDbClient();
     clientPtr->execSqlAsync(
-            "SELECT id, name FROM device",
+            "SELECT id, name FROM device ORDER BY id",
             [callback, ctrlData](const orm::Result &r) mutable {
                 unordered_map<int, string> devices;
 

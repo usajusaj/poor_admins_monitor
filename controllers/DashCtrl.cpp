@@ -16,12 +16,15 @@ void DashCtrl::dash(
 
     auto clientPtr = drogon::app().getDbClient();
     clientPtr->execSqlAsync(
-            "SELECT id, name FROM device ORDER BY id",
+            "SELECT id, name, verbose_name FROM device ORDER BY id",
             [callback, ctrlData](const orm::Result &r) mutable {
                 unordered_map<int, string> devices;
 
                 for (const auto &row : r) {
                     devices[row["id"].as<int>()] = row["name"].as<string>();
+                    if (row["verbose_name"].as<string>().size() > 0) {
+                        devices[row["id"].as<int>()] = row["verbose_name"].as<string>();
+                    }
                 }
 
                 auto data = ctrlData.getData();
@@ -45,12 +48,15 @@ void DashCtrl::realtime(
 
     auto clientPtr = drogon::app().getDbClient();
     clientPtr->execSqlAsync(
-            "SELECT id, name FROM device ORDER BY id",
+            "SELECT id, name, verbose_name FROM device ORDER BY id",
             [callback, ctrlData](const orm::Result &r) mutable {
                 unordered_map<int, string> devices;
 
                 for (const auto &row : r) {
                     devices[row["id"].as<int>()] = row["name"].as<string>();
+                    if (row["verbose_name"].as<string>().size() > 0) { 
+                        devices[row["id"].as<int>()] = row["verbose_name"].as<string>();
+                    }
                 }
 
                 auto data = ctrlData.getData();

@@ -54,6 +54,11 @@ sqlite3 database.db
 - Configuration script to assign each device a verbose name and location
 - Add systemd timer example file for a <1m polling interval (impossible in cron)
 
+## Thanks to
+- [Drogon](https://github.com/an-tao/drogon) for an awesome C++ web framework
+- [Pure.css](https://purecss.io/) for an elegant lightweight css scaffold
+- [Chart.js](https://www.chartjs.org/) for slick charts
+
 ## Gallery
 ### Main page with graphed temperatures
 ![Dashboard](gallery/Graph_page.png)

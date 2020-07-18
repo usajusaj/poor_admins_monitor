@@ -74,8 +74,9 @@ def check_thresholds(device_name, pre_value, cur_value):
     if pre_value is None:
         return
 
-    low = config.getint('THRESHOLDS', 'temp_low')
-    high = config.getint('THRESHOLDS', 'temp_high')
+    # our settings are stored in normal format
+    low = config.getfloat('THRESHOLDS', 'temp_low') * 1000
+    high = config.getfloat('THRESHOLDS', 'temp_high') * 1000
 
     if cur_value <= low < pre_value:
         # We got too cold

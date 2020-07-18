@@ -115,7 +115,7 @@ chartjs = new Chart(ctx, {
                     labelString: 'Temperature (°C)'
                 },
                 ticks: {
-                    suggestedMin: 15,
+                    suggestedMin: 20,
                     suggestedMax: 30
                 }
             }]

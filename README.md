@@ -50,7 +50,6 @@ sqlite3 database.db
   
 ## Future features
 - Advertise service over avahi
-- Email alerts in polling script
 - Configuration script to assign each device a verbose name and location
 - Add systemd timer example file for a <1m polling interval (impossible in cron)
 

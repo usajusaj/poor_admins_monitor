@@ -161,7 +161,6 @@ def main():
         else:
             log.warning("1-Wire folder (%s) does not exist", args.devices_root)
 
-        alerts.append("SAFAF")
         if alerts:
             send_email(create_msg("PAM: Temperature threshold alert triggered!", '\n'.join(alerts)))
 

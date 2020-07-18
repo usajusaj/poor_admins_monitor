@@ -49,6 +49,8 @@ def send_email(msg):
     msg['From'] = config.get('EMAIL', 'username')
     msg['To'] = config.get('EMAIL', 'recipients').split(',')
 
+    log.debug("Sending alert email to %s", msg['To'])
+
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
     server.starttls()
@@ -155,6 +157,7 @@ def main():
 
                     alert = check_thresholds(verbose_name, last_reading, temperature)
                     if alert:
+                        log.warning("Threhold breach on device %s", device.name)
                         alerts.append(alert)
                 else:
                     log.warning("Device %s failed CRC", device.name)

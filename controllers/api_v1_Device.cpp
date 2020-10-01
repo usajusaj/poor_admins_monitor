@@ -114,7 +114,7 @@ Device::historyRange(const HttpRequestPtr &req, function<void(const HttpResponse
     }
 
     clientPtr->execSqlAsync(
-            "SELECT device, datetime(ts, 'localtime') as ts, value FROM reading WHERE device=? ORDER BY ts DESC LIMIT " +
+            "SELECT device, datetime(ts, 'localtime') as ts_str, value FROM reading WHERE device=? ORDER BY ts DESC LIMIT " +
             to_string(limit),
             [callback](const orm::Result &r) {
                 Json::Value ret;
@@ -125,7 +125,7 @@ Device::historyRange(const HttpRequestPtr &req, function<void(const HttpResponse
                     int i = 0;
                     for (const auto &row : r) {
                         ret["device"]["id"] = row["device"].as<int>();
-                        ret["device"]["history"][i]["ts"] = row["ts"].as<string>();
+                        ret["device"]["history"][i]["ts"] = row["ts_str"].as<string>();
                         ret["device"]["history"][i]["t"] = row["value"].as<int>() / 1000.;
                         i++;
                     }

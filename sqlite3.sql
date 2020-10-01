@@ -25,6 +25,7 @@ CREATE TABLE reading
 );
 
 CREATE INDEX reading_ts_idx ON reading (ts);
+CREATE INDEX reading_device_idx ON reading (device);
 
 CREATE TRIGGER reading_history
     AFTER UPDATE

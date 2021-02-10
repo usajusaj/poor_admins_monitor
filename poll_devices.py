@@ -116,7 +116,7 @@ def main():
         log.debug("Fetching known devices")
         existing_devices = {}
         for n, i, t, v in conn.execute("SELECT name, id, last_reading, verbose_name FROM device;"):
-            existing_devices[n] = (i, t, v)
+            existing_devices[n] = (i, t, v or n)
         log.debug("Known devices: %s", ', '.join(existing_devices.keys()))
 
         alerts = []
@@ -138,7 +138,7 @@ def main():
                 if name not in existing_devices:
                     log.info("Found new device %s, inserting to database", device.name)
                     cur = conn.execute("INSERT INTO device(name, path) VALUES (?, ?);", (name, str(device)))
-                    existing_devices[name] = cur.lastrowid, None
+                    existing_devices[name] = cur.lastrowid, None, name
 
                 device_id, last_reading, verbose_name = existing_devices[name]
 
